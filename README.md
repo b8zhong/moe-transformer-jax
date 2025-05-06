@@ -1,6 +1,6 @@
-# JAX MoE
+# PyTorch MoE
 
-JAX MoE is a modular implementation of a Mixture-of-Experts transformer using JAX and Haiku. It is designed for flexibility, extensibility, and performance across multiple devices. The architecture focuses on sparse expert routing, efficient attention, and scalable tokenization.
+PyTorch MoE is a modular implementation of a Mixture-of-Experts transformer using PyTorch. It is designed for flexibility, extensibility, and performance. The architecture focuses on sparse expert routing, efficient attention, and scalable tokenization.
 
 ## Features
 
@@ -9,8 +9,7 @@ JAX MoE is a modular implementation of a Mixture-of-Experts transformer using JA
 - Attention with KV caching for autoregressive use cases
 - Expert capacity limits with residual fallback on overflow
 - Parallelized BPE tokenizer with deterministic merges
-- Modular Haiku components for experimentation
-- Multi-device expert execution via `shard_map`
+- Modular PyTorch components for experimentation
 
 ## Components
 
@@ -47,7 +46,6 @@ pip install -r requirements.txt
 - Top-k expert selection is differentiable and batch-aware
 - Attention uses rotary position encoding on keys and queries
 - Grouped-query attention reduces KV head duplication
-- Sharding logic can assign different experts to different devices
 - BPE uses regex-based segmentation compatible with GPT-4 patterns
 
 ## Work in Progress
@@ -57,7 +55,6 @@ This repo is not complete for end-to-end training. Missing features include:
 - Dataset pipeline and loss function
 - Optimizer and training loop
 - Generation/sampling logic
-- Multi-host training support
 - Flash attention or fused kernels
 
 ## License

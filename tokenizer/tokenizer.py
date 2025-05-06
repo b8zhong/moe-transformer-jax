@@ -1,6 +1,6 @@
-
 import regex as re
 from collections import OrderedDict
+import torch
 from utils import get_pair_counts, merge_tokens, GPT4_SPLIT_PATTERN
 
 class Tokenizer():
@@ -18,7 +18,7 @@ class Tokenizer():
     ids = list(text.encode("utf-8"))
     while len(ids) > 2:
       counts = get_pair_counts(ids)
-      pair = min(counts, lambda p: self.merges.get(p, float('inf')))
+      pair = min(counts, key=lambda p: self.merges.get(p, float('inf')))
 
       if pair not in self.merges:
         break
@@ -27,7 +27,7 @@ class Tokenizer():
 
     return ids 
 
-  def encode(self, text, merges):
+  def encode(self, text):
     """
     Encode text into token ids
     """
@@ -35,19 +35,20 @@ class Tokenizer():
     text_chunks = re.findall(self.compiled_pattern, text)
     ids = []
     for chunk in text_chunks:
-      ids += self.encode_chunk(chunk, merges)
+      ids += self.encode_chunk(chunk)
 
-    return ids
+    return torch.tensor(ids, dtype=torch.long)
 
-  def decode(self, ids, vocab):
+  def decode(self, ids):
     """
     Decode token ids into text
     """
-
-    text_bytes = b"".join(vocab[idx] for idx in ids)
+    if isinstance(ids, torch.Tensor):
+      ids = ids.tolist()
+      
+    text_bytes = b"".join(self.vocab[idx] for idx in ids)
     text = text_bytes.decode("utf-8", errors="replace")
     return text
-
 
   def load_merges(self, file_path):
     """
