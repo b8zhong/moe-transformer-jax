@@ -18,7 +18,7 @@ def split_dataset(dataset, num_splits):
 
   size = len(dataset)
   split_size = size // num_splits
-  splits = []
+  splits: list = []
   for i in range(0, size, split_size):
       if (size - i) < 2 * split_size:
           split = dataset[i:-1]
